@@ -347,8 +347,16 @@ setInterval(refresh, 3000);
 
 // ── HTTP Server ──────────────────────────────────────────────────────────────
 
+function logDebug(msg: string) {
+  try {
+    ensureDir()
+    fs.appendFileSync(path.join(OBSERVE_DIR, 'debug.log'), `${new Date().toISOString()} ${msg}\n`)
+  } catch { /* best effort */ }
+}
+
 function startServer() {
   if (server) return
+  logDebug('startServer called')
 
   server = http.createServer((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
@@ -422,8 +430,9 @@ function startServer() {
     res.writeHead(404); res.end('Not found')
   })
 
-  server.listen(PORT, '127.0.0.1', () => { /* silent */ })
+  server.listen(PORT, '127.0.0.1', () => { logDebug(`server listening on ${PORT}`) })
   server.on('error', (err: NodeJS.ErrnoException) => {
+    logDebug(`server error: ${err.code} ${err.message}`)
     if (err.code === 'EADDRINUSE') server = null
   })
 }
@@ -455,6 +464,7 @@ export function logPaiEvent(summary: string, meta?: Record<string, unknown>) {
 // ── Extension ────────────────────────────────────────────────────────────────
 
 export default function (pi: ExtensionAPI) {
+  logDebug('pi-observe extension factory called')
   let widgetCtx: ExtensionContext | null = null
 
   // ── /observe command ────────────────────────────────────────────────
@@ -503,6 +513,7 @@ export default function (pi: ExtensionAPI) {
     startServer()
 
     appendEvent({ ts: new Date().toISOString(), type: 'session_start', source: 'pi', session: sessionId, summary: `Pi session in ${ctx.cwd}` })
+    logDebug(`session_start fired, cwd=${ctx.cwd}`)
     ctx.ui.notify(`📊 π-observe v1.0 | /observe | http://localhost:${PORT}`, 'info')
   })
 
