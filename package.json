@@ -1,0 +1,38 @@
+{
+  "name": "pi-observe",
+  "version": "1.0.0",
+  "description": "Real-time observability dashboard for Pi — event capture, swimlane timeline, token tracking, tool usage stats. Ported from Miessler's PAI Observability system.",
+  "type": "module",
+  "main": "src/extension.ts",
+  "pi": {
+    "extensions": ["src/extension.ts"],
+    "commands": ["observe"],
+    "tools": []
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "observability",
+    "dashboard",
+    "monitoring",
+    "pai",
+    "swimlane",
+    "timeline"
+  ],
+  "author": "arosstale",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arosstale/pi-observe.git"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": ">=0.50.0"
+  }
+}
