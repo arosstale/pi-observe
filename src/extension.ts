@@ -428,9 +428,9 @@ function startServer() {
   })
 }
 
-function openDashboard() {
+async function openDashboard() {
   const url = `http://localhost:${PORT}`
-  const { execSync } = require('child_process')
+  const { execSync } = await import('child_process')
   try {
     if (process.platform === 'win32') execSync(`start "" "${url}"`, { stdio: 'ignore' })
     else if (process.platform === 'darwin') execSync(`open "${url}"`, { stdio: 'ignore' })
